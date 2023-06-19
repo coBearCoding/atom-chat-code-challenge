@@ -132,3 +132,6 @@ dist
 
 # Firebase Credentails
 config/firebase/firebase-credentials.json
+
+# Idea Project Files
+.idea/

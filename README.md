@@ -107,7 +107,7 @@ In the file you will have to add the configuration fields provided in the **serv
 
 
 
-#### Firebase Emulator
+### Firebase Emulator
 Finally, to run unit testing it is required to have installed firebase-emulator:
 [Install Firebase Emulator](https://firebase.google.com/docs/emulator-suite/install_and_configure)
 

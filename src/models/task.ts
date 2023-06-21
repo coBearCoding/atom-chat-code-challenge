@@ -1,4 +1,4 @@
-import {IsDate, Min, IsNotEmpty, IsNumber} from 'class-validator';
+import {IsDate, Min, IsNotEmpty, IsNumber, IsString} from 'class-validator';
 
 export enum TaskStatusIndex{
     PENDING = 1,
@@ -8,10 +8,13 @@ export enum TaskStatusIndex{
 }
 
 export class Task{
+
     id?: string;
 
     @IsNotEmpty()
+    @IsString()
     title: string;
+
     description?: string; // optional field for more details on task
 
     @IsDate()

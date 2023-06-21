@@ -2,7 +2,7 @@ import {Request, Response, NextFunction} from "express";
 import {sendResponse} from '../helpers/response';
 import {constants} from "http2";
 
-function validApiKey(req: Request, res: Response, next: NextFunction){
+export function validApiKey(req: Request, res: Response, next: NextFunction){
     let clientApiKey = req.header("x-api-key");
     const appApiKey = process.env.APP_API_KEY;
 
@@ -11,9 +11,4 @@ function validApiKey(req: Request, res: Response, next: NextFunction){
         return
     }
     next();
-}
-
-
-export {
-    validApiKey
 }

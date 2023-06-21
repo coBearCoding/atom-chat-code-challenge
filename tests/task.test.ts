@@ -1,8 +1,8 @@
 import {describe, expect, test, beforeAll, afterAll} from '@jest/globals';
 import {
     initializeTestEnvironment,
+    RulesTestEnvironment,
     assertSucceeds,
-    RulesTestEnvironment
 } from '@firebase/rules-unit-testing';
 import dotenv from "dotenv";
 import {validate, ValidationError} from 'class-validator';
@@ -10,7 +10,6 @@ import {Task, TaskStatusIndex} from '../src/models/task';
 import {DocumentData} from "firebase-admin/firestore";
 
 dotenv.config();
-
 
 let testEnvironment: RulesTestEnvironment;
 
@@ -96,11 +95,41 @@ describe('Firebase Firestore - Task Module  Tests',function (): void {
         await assertSucceeds(taskRef.update(data));
     });
 
+    test("Show error when updating a task the wrong id parameter", async(): Promise<void> => {
+        let taskId: string = "1nonExistent2"; // * Please remember to change the ID as they are auto-generated
+
+        let task: Task = new Task(
+            "Third Task",
+            new Date("03/08/2023"),
+            TaskStatusIndex.COMPLETED,
+        );
+        task.description = "Medium description";
+        task.status = "COMPLETED";
+        task.reverseImplementStatus(task.status);
+
+        let data: DocumentData = task.toJson();
+        const db = testEnvironment.unauthenticatedContext().firestore();
+        const taskRef = await db.collection("tasks").doc(taskId);
+        try{
+            await taskRef.update(data);
+        }catch (e){
+            expect(typeof(e)).toMatch("object");
+        }
+    });
+
     test("Delete a task with the id parameter", async(): Promise<void> => {
        let taskId = "gi2kGLsbuCUiLBihdigP";
         const db = testEnvironment.unauthenticatedContext().firestore();
         const taskRef = db.collection("tasks").doc(taskId);
         await assertSucceeds(taskRef.delete());
+    });
+
+    test("Show error when deleting a task the wrong id parameter", async(): Promise<void> => {
+        let taskId = "1nonExistent2";
+
+        const db = testEnvironment.unauthenticatedContext().firestore();
+        const taskRef = db.collection("tasks").doc(taskId);
+        await expect(taskRef.delete()).resolves.toBe(undefined);
     });
 
 

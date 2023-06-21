@@ -1,8 +1,8 @@
 import express, {Express, Request, Response} from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
-import TaskController from './src/controllers/task';
 import {validApiKey} from "./src/middleware/auth";
+import {TaskController} from "./src/controllers/task";
 
 dotenv.config();
 
@@ -14,10 +14,10 @@ app.use(bodyParser.json());
 
 app.use(validApiKey)
 // * Routes
-app.get('/tasks', TaskController.ListTasks);
-app.post('/tasks', TaskController.CreateTask);
-app.put('/tasks/:taskId', TaskController.UpdateTask);
-app.delete("/tasks/:taskId", TaskController.DeleteTask);
+app.get('/tasks', TaskController.listTasks);
+app.post('/tasks', TaskController.createTask);
+app.put('/tasks/:taskId', TaskController.updateTask);
+app.delete("/tasks/:taskId", TaskController.deleteTask);
 
 
 

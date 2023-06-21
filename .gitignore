@@ -136,3 +136,8 @@ config/firebase/firebase-credentials.json
 # Idea Project Files
 .idea/
 .vscode/
+
+firebase-debug.log
+firestore-debug.log
+
+ui-debug.log

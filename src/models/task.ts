@@ -1,18 +1,35 @@
-class Task{
-    
+import {IsDate, Min, IsNotEmpty, IsNumber} from 'class-validator';
+
+export enum TaskStatusIndex{
+    PENDING = 1,
+    COMPLETED = 2,
+    DELETED = 3,
+    ERROR = 4,
+}
+
+export class Task{
+    id?: string;
+
+    @IsNotEmpty()
+    title: string;
+    description?: string; // optional field for more details on task
+
+    @IsDate()
+    dueDate: Date;
+
+    @IsNotEmpty()
+    status?: string;
+
+    @IsNumber()
+    @Min(1)
+    statusIndex?: number = TaskStatusIndex.PENDING;
+
+
     constructor(title: string, dueDate: Date, statusIndex: number){
         this.title = title;
         this.dueDate = dueDate;
         this.statusIndex = statusIndex;
     }
-
-    id?: string;
-    title: string = "";
-    description?: string; // optional field for more details on task
-    dueDate: Date = new Date("00/00/01");
-    status?: string = "";
-    statusIndex?: number = TaskStatusIndex.PENDING;
-
 
 
     implementStatus(statusIndex: number | undefined){
@@ -60,17 +77,4 @@ class Task{
             status : this.status,
         }
     }
-}
-    
-
-enum TaskStatusIndex{
-    PENDING = 1,
-    COMPLETED = 2,
-    DELETED = 3,
-    ERROR = 4,
-}
-
-export{
-    Task,
-    TaskStatusIndex
 }

@@ -1,12 +1,12 @@
 import {IsDate, Min, IsNotEmpty, IsNumber, IsString, Validate} from 'class-validator';
 import {CustomStatusValidator} from '../validators/customValidator';
 import {FirebaseOperations} from "./firebaseOperations";
+import {DocumentData} from "firebase-admin/lib/firestore";
 
 export enum TaskStatusIndex{
     PENDING = 1,
     COMPLETED = 2,
-    DELETED = 3,
-    ERROR = 4,
+    ERROR = 3,
 }
 
 export class Task{
@@ -57,9 +57,6 @@ export class Task{
             case TaskStatusIndex.COMPLETED:
                 this.status = "COMPLETED";
                 break;
-            case TaskStatusIndex.DELETED:
-                this.status = "DELETED";
-                break;
 
             default:
                 this.status = "ERROR";
@@ -74,9 +71,6 @@ export class Task{
                 break;
             case "COMPLETED":
                 this.statusIndex = TaskStatusIndex.COMPLETED;
-                break;
-            case "DELETED":
-                this.statusIndex = TaskStatusIndex.DELETED;
                 break;
             default:
                 this.statusIndex = TaskStatusIndex.ERROR;
@@ -96,4 +90,5 @@ export class Task{
 
 export interface ITaskService extends FirebaseOperations{
     getTasks: () => Promise<Task[]>;
+    createTask: (data: Task) => Promise<string>;
 }

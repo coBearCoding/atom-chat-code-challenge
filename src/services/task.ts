@@ -27,8 +27,19 @@ export namespace TaskService {
             });
         }
 
-        async createTask(data: DocumentData): Promise<string> {
+        async createTask(task: Task): Promise<string> {
             const taskRef = db.collection(taskCollection);
+            try{
+                let doc = await taskRef.where("title", "==", task.title).get();
+                if(!doc.empty){
+                    throw new Error('task already created');
+                }
+            }catch (e){
+                console.log(`Task already created ${e}`);
+                return `${e}`;
+            }
+
+            let data = task.toJson();
             try{
                 let result = await taskRef.add(data)
                 console.log(`Added document with ID: ${result.id}`);

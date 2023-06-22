@@ -36,7 +36,7 @@ export namespace TaskController{
             return
         }
 
-        let saveTask: string = await taskService.createTask(task.toJson());
+        let saveTask: string = await taskService.createTask(task);
 
         sendResponse(res, null,constants.HTTP_STATUS_CREATED, saveTask, [""]);
     }

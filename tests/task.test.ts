@@ -2,7 +2,7 @@ import {describe, expect, test, beforeAll, afterAll} from '@jest/globals';
 import {
     initializeTestEnvironment,
     RulesTestEnvironment,
-    assertSucceeds,
+    assertSucceeds, assertFails,
 } from '@firebase/rules-unit-testing';
 import dotenv from "dotenv";
 import {validate, ValidationError} from 'class-validator';
@@ -33,7 +33,6 @@ describe("Task Class Validation - Task Module Tests", function (): void {
         );
 
         let validationErrors = await validate(task);
-        console.log(validationErrors);
         expect(validationErrors.length).toBeGreaterThan(0);
     });
 
@@ -99,6 +98,34 @@ describe('Firebase Firestore - Task Module  Tests',function (): void {
 
         let result = await taskRef.doc("gi2kGLsbuCUiLBihdigP");
         await assertSucceeds(result.set(data));
+
+    });
+
+    test("Show error when creating a task with an already added Title", async(): Promise<void> => {
+        // * Add test task data
+        let task = new Task(
+            "First Task",
+        )
+        task.dueDate = new Date("2023/05/07");
+        task.statusIndex = TaskStatusIndex.PENDING;
+        task.description = "Tiny Description";
+        task.implementStatus(task.statusIndex);
+
+        let data: DocumentData = task.toJson();
+        // * Firebase - Firestore
+        const db = testEnvironment.unauthenticatedContext().firestore();
+        const taskRef = await db.collection("tasks");
+
+        try{
+            let doc = await taskRef.where("title", "==", task.title).get();
+            if(!doc.empty){
+                throw new Error('Error creating task');
+            }
+            let result = await taskRef.doc("gi2kGLsbuCUiLBihdigP");
+            await result.set(data);
+        }catch (e){
+            expect(typeof(e)).toMatch("object");
+        }
 
     });
 

@@ -1,4 +1,5 @@
-import {IsDate, Min, IsNotEmpty, IsNumber, IsString} from 'class-validator';
+import {IsDate, Min, IsNotEmpty, IsNumber, IsString, Validate} from 'class-validator';
+import {CustomStatusValidator} from '../validators/customValidator';
 import {FirebaseOperations} from "./firebaseOperations";
 
 export enum TaskStatusIndex{
@@ -31,6 +32,9 @@ export class Task{
     })
     @IsString({
         message: "status must be type string, it should be PENDING or COMPLETED"
+    })
+    @Validate(CustomStatusValidator, {
+        message: "status should be PENDING OR COMPLETED"
     })
     status?: string;
 

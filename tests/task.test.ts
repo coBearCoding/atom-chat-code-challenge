@@ -16,10 +16,10 @@ let testEnvironment: RulesTestEnvironment;
 describe("Task Class Validation - Task Module Tests", function (): void {
     test("Create a task instance with all required parameters", async(): Promise<void> => {
         let task = new Task(
-            "Task 1",
-            new Date("03/07/2023"),
-            TaskStatusIndex.PENDING,
+            "Task 1"
         );
+        task.dueDate = new Date("2023/05/07")
+        task.statusIndex = TaskStatusIndex.PENDING;
         task.description = "Some Description";
         task.implementStatus(task.statusIndex);
 
@@ -29,10 +29,35 @@ describe("Task Class Validation - Task Module Tests", function (): void {
 
     test("Show error when creating a task with missing required parameters", async(): Promise<void> => {
         let task = new Task(
-            "",
-            new Date("00/00/0000"),
-            0
+            ""
         );
+
+        let validationErrors = await validate(task);
+        console.log(validationErrors);
+        expect(validationErrors.length).toBeGreaterThan(0);
+    });
+
+    test("Show error when a task instance with wrong date format", async(): Promise<void> => {
+        let task = new Task(
+            "Task 1"
+        );
+        task.dueDate = new Date("06/02/2023/01");
+        task.statusIndex = TaskStatusIndex.PENDING;
+        task.description = "Some Description";
+        task.implementStatus(task.statusIndex);
+
+        let validationErrors = await validate(task);
+        expect(validationErrors.length).toBeGreaterThan(0);
+    });
+
+    test("Show error if status is different from PENDING or COMPLETED", async(): Promise<void> => {
+        let task = new Task(
+            "Task 1"
+        );
+        task.dueDate = new Date("06/02/2023");
+        task.status = "DEFAULT";
+        task.description = "Some Description";
+        task.reverseImplementStatus(task.status);
 
         let validationErrors = await validate(task);
         expect(validationErrors.length).toBeGreaterThan(0);
@@ -57,13 +82,13 @@ describe('Firebase Firestore - Task Module  Tests',function (): void {
         await assertSucceeds(taskSnapshot.get());
     });
 
-    test("Save a task with all parameters given", async (): Promise<void> => {
+    test("Create a task with all parameters given", async (): Promise<void> => {
         // * Add test task data
         let task = new Task(
             "First Task",
-            new Date("03/07/2023"),
-            TaskStatusIndex.PENDING
         )
+        task.dueDate = new Date("2023/05/07");
+        task.statusIndex = TaskStatusIndex.PENDING;
         task.description = "Tiny Description";
         task.implementStatus(task.statusIndex);
 
@@ -82,9 +107,8 @@ describe('Firebase Firestore - Task Module  Tests',function (): void {
 
         let task: Task = new Task(
             "Second Task",
-            new Date("03/08/2023"),
-            TaskStatusIndex.COMPLETED,
         );
+        task.dueDate = new Date("2023/05/07");
         task.description = "Long description";
         task.status = "COMPLETED";
         task.reverseImplementStatus(task.status);
@@ -99,10 +123,9 @@ describe('Firebase Firestore - Task Module  Tests',function (): void {
         let taskId: string = "1nonExistent2"; // * Please remember to change the ID as they are auto-generated
 
         let task: Task = new Task(
-            "Third Task",
-            new Date("03/08/2023"),
-            TaskStatusIndex.COMPLETED,
+            "Third Task"
         );
+        task.dueDate = new Date("2023/05/07");
         task.description = "Medium description";
         task.status = "COMPLETED";
         task.reverseImplementStatus(task.status);

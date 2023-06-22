@@ -35,8 +35,6 @@ COPY --from=BUILDER /app/atom-chat-code-challenge/dist ./dist
 
 COPY package.json .
 
-# COPY config/firebase/firebase-credentials.json ./dist/config/firebase/firebase-credentials.json
-
 RUN npm install --omit=dev
 
 CMD ["npm", "start"]

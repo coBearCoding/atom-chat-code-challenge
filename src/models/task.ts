@@ -10,7 +10,6 @@ export enum TaskStatusIndex{
 }
 
 export class Task{
-
     id?: string;
 
     @IsNotEmpty()

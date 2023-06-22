@@ -2,7 +2,7 @@ import {describe, expect, test, beforeAll, afterAll} from '@jest/globals';
 import {
     initializeTestEnvironment,
     RulesTestEnvironment,
-    assertSucceeds, assertFails,
+    assertSucceeds,
 } from '@firebase/rules-unit-testing';
 import dotenv from "dotenv";
 import {validate, ValidationError} from 'class-validator';
@@ -72,7 +72,7 @@ describe('Firebase Firestore - Task Module  Tests',function (): void {
                 port: 8080,
             }
         });
-    })
+    });
 
     test("Can read tasks from the collection", async (): Promise<void> => {
         const db = testEnvironment.unauthenticatedContext().firestore();

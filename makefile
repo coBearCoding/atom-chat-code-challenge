@@ -5,7 +5,7 @@ build:
 
 run:
 	docker compose stop
-	docker compose build
+	docker compose up -d
 
 stop:
 	docker compose down

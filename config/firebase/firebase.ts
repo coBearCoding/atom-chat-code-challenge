@@ -3,17 +3,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// const firebaseCredential = process.env.FIREBASE_CREDENTIALS_PATH;
-// let serviceAccount: any ;
-//
-// if(firebaseCredential != undefined){
-//     serviceAccount = require(firebaseCredential);
-// }
-//
-// const firebaseConfig = {
-//     credential: cert(serviceAccount),
-// }
-
 const certConfig: any = {
     type: process.env.FIREBASE_TYPE,
     project_id: process.env.FIREBASE_PROJECT_ID,

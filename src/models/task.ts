@@ -1,4 +1,5 @@
 import {IsDate, Min, IsNotEmpty, IsNumber, IsString} from 'class-validator';
+import {FirebaseOperations} from "./firebaseOperations";
 
 export enum TaskStatusIndex{
     PENDING = 1,
@@ -17,10 +18,20 @@ export class Task{
 
     description?: string; // optional field for more details on task
 
-    @IsDate()
-    dueDate: Date;
+    @IsDate({
+        message: "dueDate must be a valid date"
+    })
+    @IsNotEmpty({
+        message: "dueDate can't be empty"
+    })
+    dueDate?: Date;
 
-    @IsNotEmpty()
+    @IsNotEmpty({
+        message: "status can't be empty, it should be PENDING or COMPLETED"
+    })
+    @IsString({
+        message: "status must be type string, it should be PENDING or COMPLETED"
+    })
     status?: string;
 
     @IsNumber()
@@ -28,10 +39,8 @@ export class Task{
     statusIndex?: number = TaskStatusIndex.PENDING;
 
 
-    constructor(title: string, dueDate: Date, statusIndex: number){
+    constructor(title: string){
         this.title = title;
-        this.dueDate = dueDate;
-        this.statusIndex = statusIndex;
     }
 
 
@@ -66,7 +75,6 @@ export class Task{
                 this.statusIndex = TaskStatusIndex.DELETED;
                 break;
             default:
-                this.status = "ERROR";
                 this.statusIndex = TaskStatusIndex.ERROR;
         }
     }
@@ -74,10 +82,14 @@ export class Task{
     toJson(){
         return{
             title: this.title,
-            description:this.description || "",
-            due_date: this.dueDate.toString(),
+            description: this.description || "",
+            due_date: this.dueDate,
             statusIndex: this.statusIndex,
             status : this.status,
         }
     }
+}
+
+export interface ITaskService extends FirebaseOperations{
+    getTasks: () => Promise<Task[]>;
 }

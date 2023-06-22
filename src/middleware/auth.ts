@@ -7,7 +7,7 @@ export function validApiKey(req: Request, res: Response, next: NextFunction){
     const appApiKey = process.env.APP_API_KEY;
 
     if (appApiKey != clientApiKey) {
-        sendResponse(res, null, constants.HTTP_STATUS_UNAUTHORIZED, "", "invalid api key");
+        sendResponse(res, null, constants.HTTP_STATUS_UNAUTHORIZED, "", ["invalid api key"]);
         return
     }
     next();
